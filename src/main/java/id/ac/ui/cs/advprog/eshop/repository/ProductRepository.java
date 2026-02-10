@@ -18,7 +18,9 @@ public class ProductRepository {
 
     public Product update(Product updatedProduct) {
         for (int i = 0; i < productData.size(); i++) {
-            if (productData.get(i).getProductId().equals(updatedProduct.getProductId())) {
+            String currentProductId = productData.get(i).getProductId();
+            String updatedProductId = updatedProduct.getProductId();
+            if (currentProductId.equals(updatedProductId)) {
                 productData.set(i, updatedProduct);
                 return updatedProduct;
             }
@@ -30,9 +32,10 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(String id) {
+    public Product findById(String productId) {
         for (Product product : productData) {
-            if (product.getProductId().equals(id)) {
+            String currentProductId = product.getProductId();
+            if (currentProductId.equals(productId)) {
                 return product;
             }
         }
