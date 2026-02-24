@@ -133,4 +133,40 @@ class ProductRepositoryTest {
         productRepository.deleteById("non-exist");
         assertFalse(productRepository.findAll().hasNext());
     }
+
+    @Test
+    void testCreateProductWithoutId() {
+        Product product = new Product();
+        product.setProductName("No ID Product");
+        product.setProductQuantity(10);
+
+        Product saved = productRepository.create(product);
+        assertNotNull(saved.getProductId());
+        assertEquals("No ID Product", saved.getProductName());
+    }
+
+    @Test
+    void testFindByIdWithNonMatchingId() {
+        Product product = new Product();
+        product.setProductId("pX");
+        product.setProductName("Some Product");
+        productRepository.create(product);
+
+        Product result = productRepository.findById("non-existent-id");
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteByIdNonMatchingId() {
+        Product product = new Product();
+        product.setProductId("pY");
+        product.setProductName("Another Product");
+        productRepository.create(product);
+
+        productRepository.deleteById("non-existent-id");
+        
+        Product fetched = productRepository.findById("pY");
+        assertNotNull(fetched);
+        assertEquals("Another Product", fetched.getProductName());
+    }
 }
