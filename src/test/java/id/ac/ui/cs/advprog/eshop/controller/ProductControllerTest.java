@@ -4,12 +4,8 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,20 +15,23 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
     private ProductService service;
+    private ProductController controller;
 
     private Product product1;
     private Product product2;
 
     @BeforeEach
     void setup() {
+        service = mock(ProductService.class);
+
+        controller = new ProductController(service);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         product1 = new Product();
         product1.setProductId("1");
         product1.setProductName("Product 1");
@@ -53,8 +52,8 @@ class ProductControllerTest {
     @Test
     void createProductPost_ShouldCallServiceAndRedirect() throws Exception {
         mockMvc.perform(post("/product/create")
-                        .param("id", "1")
-                        .param("name", "Product 1"))
+                        .param("productId", "1")
+                        .param("productName", "Product 1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("list"));
 
@@ -66,11 +65,10 @@ class ProductControllerTest {
         List<Product> products = Arrays.asList(product1, product2);
         when(service.findAll()).thenReturn(products);
 
-        MvcResult result = mockMvc.perform(get("/product/list"))
+        mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("productList"))
-                .andExpect(model().attributeExists("products"))
-                .andReturn();
+                .andExpect(model().attributeExists("products"));
 
         verify(service, times(1)).findAll();
     }
@@ -90,8 +88,8 @@ class ProductControllerTest {
     @Test
     void editProductPost_ShouldCallServiceAndRedirect() throws Exception {
         mockMvc.perform(post("/product/edit")
-                        .param("id", "1")
-                        .param("name", "Updated Product"))
+                        .param("productId", "1")
+                        .param("productName", "Updated Product"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("list"));
 
