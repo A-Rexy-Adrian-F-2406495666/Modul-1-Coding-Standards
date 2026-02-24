@@ -81,7 +81,7 @@ tasks.jacocoTestReport {
 sonar {
     properties {
         property("sonar.projectKey", "A-Rexy-Adrian-F-2406495666_Modul-1-Coding-Standards")
-        property("sonar.organization", "A-Rexy Adrian F-2406495666")
+        property("sonar.organization", "a-rexy-adrian-f-2406495666")
         property("sonar.host.url", "https://sonarcloud.io")
     }
 }
