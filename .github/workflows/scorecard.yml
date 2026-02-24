@@ -15,7 +15,12 @@ on:
     branches: [ "main" ]
 
 # Declare default permissions as read only.
-permissions: read-all
+permissions:
+  contents: read       # access repo file
+  actions: read        # access workflow actions
+  security-events: write # upload to code scanning
+  id-token: write       # publish results / badge
+
 
 jobs:
   analysis:
