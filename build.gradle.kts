@@ -76,6 +76,11 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 sonar {
@@ -83,5 +88,9 @@ sonar {
         property("sonar.projectKey", "A-Rexy-Adrian-F-2406495666_Modul-1-Coding-Standards")
         property("sonar.organization", "a-rexy-adrian-f-2406495666")
         property("sonar.host.url", "https://sonarcloud.io")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
+        )
     }
 }
