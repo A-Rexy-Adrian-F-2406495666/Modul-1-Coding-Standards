@@ -65,4 +65,72 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testUpdateExistingProduct() {
+        Product product = new Product();
+        product.setProductId("p1");
+        product.setProductName("Old Name");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        Product updated = new Product();
+        updated.setProductId("p1");
+        updated.setProductName("New Name");
+        updated.setProductQuantity(20);
+
+        Product result = productRepository.update(updated);
+        assertNotNull(result);
+        assertEquals("New Name", result.getProductName());
+        assertEquals(20, result.getProductQuantity());
+
+        Product fetched = productRepository.findById("p1");
+        assertEquals("New Name", fetched.getProductName());
+    }
+
+    @Test
+    void testUpdateNonExistingProduct() {
+        Product updated = new Product();
+        updated.setProductId("not-exist");
+        updated.setProductName("Whatever");
+        Product result = productRepository.update(updated);
+        assertNull(result);
+    }
+
+    @Test
+    void testFindByIdExisting() {
+        Product product = new Product();
+        product.setProductId("p2");
+        product.setProductName("FindMe");
+        product.setProductQuantity(5);
+        productRepository.create(product);
+
+        Product fetched = productRepository.findById("p2");
+        assertNotNull(fetched);
+        assertEquals("FindMe", fetched.getProductName());
+    }
+
+    @Test
+    void testFindByIdNonExisting() {
+        Product fetched = productRepository.findById("non-exist");
+        assertNull(fetched);
+    }
+
+    @Test
+    void testDeleteExistingProduct() {
+        Product product = new Product();
+        product.setProductId("p3");
+        product.setProductName("ToDelete");
+        productRepository.create(product);
+
+        productRepository.deleteById("p3");
+        assertNull(productRepository.findById("p3"));
+        assertFalse(productRepository.findAll().hasNext());
+    }
+
+    @Test
+    void testDeleteNonExistingProduct() {
+        productRepository.deleteById("non-exist");
+        assertFalse(productRepository.findAll().hasNext());
+    }
 }
