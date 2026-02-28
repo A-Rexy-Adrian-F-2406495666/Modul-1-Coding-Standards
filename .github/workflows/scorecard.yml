@@ -18,7 +18,7 @@ on:
 permissions:
   contents: read       # access repo file
   actions: read        # access workflow actions
-  security-events: write # upload to code scanning
+  security-events: read-all # upload to code scanning
   id-token: write       # publish results / badge
 
 
