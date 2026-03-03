@@ -43,3 +43,14 @@ Saya memastikan setiap perbaikan tetap aman dengan menjalankan test secara berka
 Workflow CI/CD yang saya buat di GitHub Actions sudah memenuhi konsep Continuous Integration karena setiap push atau pull request secara otomatis menjalankan build, testing, dan analisis kualitas kode. Proses ini membantu mendeteksi error lebih awal sebelum kode di-merge ke branch utama.
 
 Selain itu, pipeline juga melakukan deployment otomatis ke platform PaaS setelah seluruh tahap berhasil, sehingga sudah mencerminkan Continuous Deployment. Proses ini membuat setiap perubahan yang lolos test langsung tersedia dalam versi ter-_deploy_ tanpa gangguan. Secara keseluruhan, implementasi ini membantu saya dalam menjaga kualitas kode dan mempercepat proses integrasi serta deployment. Tentunya masih ada ruang untuk melakukan peningkatan.
+
+
+# Modul 3: OO Principle & Software Maintainability
+
+## Reflection
+
+Dalam proyek ini saya menerapkan Single Responsibility Principle (SRP) dan Interface Segregation Principle (ISP). SRP saya terapkan dengan memisahkan layer Car menjadi Controller, Service, Repository, dan Model tersendiri. Hal ini saya lakukan agar masing-masing class memiliki satu tanggung jawab yang jelas. Controller hanya menangani request/response, Service berisi logika bisnis, dan Repository mengelola data. ISP saya terapkan dengan menggunakan interface pada layer Service agar setiap class hanya bergantung pada method yang memang dibutuhkan, serta memisahkan kontrak dan implementasi.
+
+Keuntungan menerapkan SRP dan ISP adalah kode menjadi lebih terstruktur, mudah diuji, dan mudah dikembangkan. Dengan SRP, perubahan pada logika bisnis hanya memengaruhi Service tanpa mengubah Controller atau Repository. Dengan ISP, dependency dapat di-mock saat unit testing sehingga pengujian lebih sederhana. Selain itu, jika ingin mengganti penyimpanan data dari in-memory ke database, perubahan cukup dilakukan di Repository tanpa memengaruhi layer lain.
+
+Jika tidak menerapkan prinsip tersebut, kode bisa menjadi tidak terorganisir dan sulit di-maintain. Misalnya, jika Controller juga menangani logika bisnis dan akses data, class akan menjadi terlalu kompleks (God Class) dan sulit diuji. Perubahan kecil pada satu bagian juga berpotensi memengaruhi banyak bagian lain karena tidak ada pemisahan tanggung jawab yang jelas.
